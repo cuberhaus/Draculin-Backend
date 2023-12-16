@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+import bard_api
+
 news_dict = {0: {'title': "La Marató 2023",
                  'link': "https://www.ccma.cat/tv3/marato/",
                  'img': "img1.png"},
@@ -35,21 +37,27 @@ class QuizApiView(APIView):
         return Response({'message': "Quiz"}, status=status.HTTP_200_OK)
 
 
-def generate_bard_response(message):
-    new_message = message + "!!!"
+def generate_bard_response(bard, message):
+    new_message = bard_api.ask(bard, message)
     return new_message
 
 
 class ChatApiView(APIView):
+    bard = ""
 
     def get(self, request):
-        return Response({'message': "Chat"}, status=status.HTTP_200_OK)
+        # Init bard
+        bard, prompt = bard_api.init()
+
+        return Response({'welcome_message': prompt}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        received_message = request.data.get('message')
+        bard, prompt = bard_api.init()
+        message = request.data.get('message')
+        # bard = request.data.get('bard')
 
-        if received_message:
-            response_message = generate_bard_response(received_message)
+        if message:
+            response_message = generate_bard_response(bard, message)
 
             return Response({'message': response_message}, status=201)
         else:

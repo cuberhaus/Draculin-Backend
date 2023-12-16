@@ -1,14 +1,36 @@
 from bardapi import BardCookies
 from bardapi import Bard
 import requests
+import browsercookie
+import browser_cookie3
+
+from selenium import webdriver
+
+
+def get_cookie_dict():
+    bard_endpoint = 'https://bard.google.com/'
+    driver = webdriver.Chrome()
+    driver.get(bard_endpoint)
+
+    # Get all the cookies after navigating the website
+    cookies = driver.get_cookies()
+    print('---------------')
+    print(cookies)
+    print('---------------')
+
+    return {}
+    # return r.cookies.get_dict()
+
 
 def init():
-
     cookie_dict = {
         "__Secure-1PSID": "dwj5EheYAc7k5Iczm377qGm5DpLptdP7guY17AFHYHXS2Fzg4pYipp1xnl0pmny0awIisA.",
-        "__Secure-1PSIDTS": "sidts-CjEBPVxjStfJXH6rUQT-fTATQ_jWYu9HqWPrDeoGy58lcU58E4clkKfR1XiPLno99sGkEAA  ",
-        "__Secure-1PSIDCC": "ABTWhQFRrX7fUtInXXafvdUHcgo_VNtE5pTtptoW2Yp5zGMAuSlE6We6CdAEDm_b6xoUj_w43Go"
+        "__Secure-1PSIDTS": "sidts-CjEBPVxjSkDk38tDRV_ZyJkffp9PVddVqPcOv0z1BJK8QKJxO53pGc86xHEfF6XFbxgGEAA",
+        "__Secure-1PSIDCC": "ABTWhQGGI57NMpdYH0fLG6lFNDhp6YfTS0bYZ_q536wkue84fkSAqKdso-Y2N0IpQtVTle67S8A"
     }
+
+    #cookie_dict = get_cookie_dict()  # cookies_dict
+
     bard = BardCookies(cookie_dict=cookie_dict)
 
     # Program AI
@@ -25,17 +47,18 @@ def init():
         "sea necesario, como lo haría una madre preocupada por el bienestar de su hija.")['content']
 
     # Initial prompt
-    prompt = ("¡Hola! Soy Draculina, tu asesora en temas de menstruación. Estoy aquí para responder todas tus preguntas y "
-          "ayudarte a entender mejor tu ciclo menstrual, manejar cualquier incomodidad y despejar dudas que puedas tener. "
-          "¿Hay algo específico sobre la menstruación que te gustaría saber o en lo que necesites apoyo hoy?")
+    prompt = (
+        "¡Hola! Soy Draculine, tu asesora en temas de menstruación. Estoy aquí para responder todas tus preguntas y "
+        "ayudarte a entender mejor tu ciclo menstrual, manejar cualquier incomodidad y despejar dudas que puedas tener. "
+        "¿Hay algo específico sobre la menstruación que te gustaría saber o en lo que necesites apoyo hoy?")
 
     return bard, prompt
 
 
 def ask(bard, question):
+    cookies = get_cookie()
     response = bard.get_answer(question)['content']
     return bard, response
-
 
 # while True:
 #     inputString = input()

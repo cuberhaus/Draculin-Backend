@@ -51,6 +51,7 @@ def generate_bard_response(bard, message):
 
 class ChatApiView(APIView):
     def get(self, request):
+        bard = cache.get('bard-model')
         # Init bard and store it into cache
         bard, prompt = bard_api.init()
         cache.set('bard-model', bard)
@@ -97,14 +98,15 @@ class CameraApiView(APIView):
             # Send photo to model
 
             # get model punctuation
+            punctuation = 0
 
-            # Store bard in cache
-            cache.set('bard-model', bard)
-
-            # Update messages_dict and store it into cache
-            messages_dict[len(messages_dict)] = response_message
-            cache.set('messages-dict', messages_dict)
-
-            return Response({'messages_dict': messages_dict, 'message': response_message}, status=201)
+            return Response({'photo': photo, 'punctuation': punctuation}, status=201)
         else:
             return Response({'error': "Photo not provided"}, status=400)
+
+
+class MessagesApiView(APIView):
+
+    def get(self, request):
+        messages_dict = cache.get('messages-dict')
+        return Response({'messages_dict': messages_dict}, status=status.HTTP_200_OK)

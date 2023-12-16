@@ -38,28 +38,40 @@ class QuizApiView(APIView):
 
 
 def generate_bard_response(bard, message):
-    new_message = bard_api.ask(bard, message)
+    # new_message = bard_api.ask(bard, message)
+    new_message = message + "!!!"
     return new_message
+
+
+messages_dict = {}
 
 
 class ChatApiView(APIView):
     bard = ""
 
+    # messages_dict = {}
+
     def get(self, request):
         # Init bard
-        bard, prompt = bard_api.init()
+        # bard, prompt = bard_api.init()
 
+        prompt = "welcome!"
+        messages_dict[0] = prompt
         return Response({'welcome_message': prompt}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        bard, prompt = bard_api.init()
+        # bard, prompt = bard_api.init()
         message = request.data.get('message')
+        messages_dict[len(messages_dict)] = message
+
         # bard = request.data.get('bard')
 
         if message:
-            response_message = generate_bard_response(bard, message)
+            # response_message = generate_bard_response(bard, message)
+            response_message = generate_bard_response("", message)
+            messages_dict[len(messages_dict)] = response_message
 
-            return Response({'message': response_message}, status=201)
+            return Response({'messages_dict': messages_dict, 'message': response_message}, status=201)
         else:
             return Response({'error': "Message not provided"}, status=400)
 

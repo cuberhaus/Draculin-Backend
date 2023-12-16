@@ -1,25 +1,4 @@
 from bardapi import BardCookies
-from bardapi import Bard
-import requests
-import browsercookie
-import browser_cookie3
-
-from selenium import webdriver
-
-
-def get_cookie_dict():
-    bard_endpoint = 'https://bard.google.com/'
-    driver = webdriver.Chrome()
-    driver.get(bard_endpoint)
-
-    # Get all the cookies after navigating the website
-    cookies = driver.get_cookies()
-    print('---------------')
-    print(cookies)
-    print('---------------')
-
-    return {}
-    # return r.cookies.get_dict()
 
 
 def init():
@@ -56,7 +35,6 @@ def init():
 
 
 def ask(bard, question):
-    cookies = get_cookie()
     response = bard.get_answer(question)['content']
     return bard, response
 

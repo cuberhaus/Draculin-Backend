@@ -5,7 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-news_dict = {0: "new0", 1: "new1", 2: "new2"}
+news_dict = {0: "BitsxlaMarato 2023",
+             1: "Las farmacias catalanas distribuirán productos menstruales gratuitos a partir de 2024",
+             2: "Draculito"}
 
 
 class HealthCheckApiView(APIView):

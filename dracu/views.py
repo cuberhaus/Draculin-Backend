@@ -98,7 +98,7 @@ class CameraApiView(APIView):
         if photo:
             predict_image(photo)
 
-            return Response({'photo': photo}, status=201)
+            return Response({'photo': 'prediction.jpg'}, status=201)
         else:
             return Response({'error': "Photo not provided"}, status=400)
 

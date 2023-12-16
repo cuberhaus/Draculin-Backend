@@ -8,8 +8,6 @@ def init():
         "__Secure-1PSIDCC": "ABTWhQGj_PZm57ZyUcr0nWHTA44qKfRg1BFPFirUkWcCS0D-3utU5L1pZpYtQVRrbj9DKvrb53c"
     }
 
-    #cookie_dict = get_cookie_dict()  # cookies_dict
-
     bard = BardCookies(cookie_dict=cookie_dict)
 
     # Program AI

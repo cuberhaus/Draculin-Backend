@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.core.cache import cache
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -38,37 +40,32 @@ class QuizApiView(APIView):
 
 
 def generate_bard_response(bard, message):
-    # new_message = bard_api.ask(bard, message)
-    new_message = message + "!!!"
+    new_message = bard_api.ask(bard, message)
     return new_message
 
 
-messages_dict = {}
-
-
 class ChatApiView(APIView):
-    bard = ""
-
-    # messages_dict = {}
 
     def get(self, request):
-        # Init bard
-        # bard, prompt = bard_api.init()
+        # Init bard and store it into cache
+        bard, prompt = bard_api.init()
+        cache.set('bard-model', bard)
 
-        prompt = "welcome!"
-        messages_dict[0] = prompt
+        # Init messages_dict and store it into cache
+        messages_dict = {0: prompt}
+        cache.set('messages-dict', messages_dict)
+
         return Response({'messages_dict': messages_dict, 'message': prompt}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        # bard, prompt = bard_api.init()
+        bard = cache.get('bard-model')
+        messages_dict = cache.get('messages-dict')
         message = request.data.get('message')
+
         messages_dict[len(messages_dict)] = message
 
-        # bard = request.data.get('bard')
-
         if message:
-            # response_message = generate_bard_response(bard, message)
-            response_message = generate_bard_response("", message)
+            response_message = generate_bard_response(bard, message)
             messages_dict[len(messages_dict)] = response_message
 
             return Response({'messages_dict': messages_dict, 'message': response_message}, status=201)

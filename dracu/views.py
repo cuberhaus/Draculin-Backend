@@ -28,6 +28,11 @@ class HealthCheckApiView(APIView):
         # except
 
 
+class StatsApiView(APIView):
+    def get(self, request):
+        return Response({'stats': "stats"}, status=status.HTTP_200_OK)
+
+
 class NewsApiView(APIView):
     def get(self, request):
         return Response({'news': news_dict}, status=status.HTTP_200_OK)

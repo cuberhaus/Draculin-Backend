@@ -40,16 +40,17 @@ class QuizApiView(APIView):
 
 
 def generate_bard_response(bard, message):
-    new_message = bard_api.ask(bard, message)
-    return new_message
+    bard, new_message = bard_api.ask(bard, message)
+    return bard, new_message
 
 
 class ChatApiView(APIView):
-
     def get(self, request):
         # Init bard and store it into cache
         bard, prompt = bard_api.init()
         cache.set('bard-model', bard)
+
+        print(bard.conversation_id)
 
         # Init messages_dict and store it into cache
         messages_dict = {0: prompt}
@@ -62,11 +63,21 @@ class ChatApiView(APIView):
         messages_dict = cache.get('messages-dict')
         message = request.data.get('message')
 
+        print(bard.conversation_id)
+
+        # Update messages_dict and store it into cache
         messages_dict[len(messages_dict)] = message
+        cache.set('messages-dict', messages_dict)
 
         if message:
-            response_message = generate_bard_response(bard, message)
+            bard, response_message = generate_bard_response(bard, message)
+
+            # Store bard in cache
+            cache.set('bard-model', bard)
+
+            # Update messages_dict and store it into cache
             messages_dict[len(messages_dict)] = response_message
+            cache.set('messages-dict', messages_dict)
 
             return Response({'messages_dict': messages_dict, 'message': response_message}, status=201)
         else:

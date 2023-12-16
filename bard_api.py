@@ -1,14 +1,16 @@
 from bardapi import BardCookies
-
+from bardapi import Bard
+import requests
 
 def init():
+
     cookie_dict = {
         "__Secure-1PSID": "dwj5EheYAc7k5Iczm377qGm5DpLptdP7guY17AFHYHXS2Fzg4pYipp1xnl0pmny0awIisA.",
-        "__Secure-1PSIDTS": "sidts-CjEBPVxjSpMbXh8w6vEBZC172Uy_sRjhgVDRnyyrGYtinloZGBj0CgxZa9Nqj6S4Wc_9EAA",
-        "__Secure-1PSIDCC": "ABTWhQE5AuWjqGXHoiDu5q_MZmzYrqWiCmx_1FNcif9wFSL0H68Y8RZ9fM8V20Ruvps7lpNCYhc"
+        "__Secure-1PSIDTS": "sidts-CjEBPVxjStfJXH6rUQT-fTATQ_jWYu9HqWPrDeoGy58lcU58E4clkKfR1XiPLno99sGkEAA  ",
+        "__Secure-1PSIDCC": "ABTWhQFRrX7fUtInXXafvdUHcgo_VNtE5pTtptoW2Yp5zGMAuSlE6We6CdAEDm_b6xoUj_w43Go"
     }
-
     bard = BardCookies(cookie_dict=cookie_dict)
+
     # Program AI
     response = bard.get_answer(
         "Eres una IA programada para actuar como una educadora sexual especializada en menstruación, con un enfoque "
@@ -20,18 +22,19 @@ def init():
         "empático y respetuoso, creando un ambiente cálido y seguro, donde las mujeres se sientan como si estuvieran "
         "hablando con una madre de confianza. Además de ofrecer consejos prácticos y apoyo emocional, debes transmitir "
         "empatía y cuidado en tus respuestas, y alentar a las usuarias a consultar con profesionales de la salud cuando "
-        "sea necesario, como lo haría una madre preocupada por el bienestar de su hija.")[
-        'content']
+        "sea necesario, como lo haría una madre preocupada por el bienestar de su hija.")['content']
+
     # Initial prompt
-    prompt = ("¡Hola! Soy Draculin, tu asesora en temas de menstruación. Estoy aquí para responder todas tus preguntas y "
+    prompt = ("¡Hola! Soy Draculina, tu asesora en temas de menstruación. Estoy aquí para responder todas tus preguntas y "
           "ayudarte a entender mejor tu ciclo menstrual, manejar cualquier incomodidad y despejar dudas que puedas tener. "
           "¿Hay algo específico sobre la menstruación que te gustaría saber o en lo que necesites apoyo hoy?")
+
     return bard, prompt
 
 
 def ask(bard, question):
     response = bard.get_answer(question)['content']
-    return response
+    return bard, response
 
 
 # while True:

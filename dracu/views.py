@@ -57,7 +57,7 @@ class ChatApiView(APIView):
 
         prompt = "welcome!"
         messages_dict[0] = prompt
-        return Response({'welcome_message': prompt}, status=status.HTTP_200_OK)
+        return Response({'messages_dict': messages_dict, 'message': prompt}, status=status.HTTP_200_OK)
 
     def post(self, request):
         # bard, prompt = bard_api.init()

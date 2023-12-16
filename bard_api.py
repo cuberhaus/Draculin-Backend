@@ -5,7 +5,7 @@ def init():
     cookie_dict = {
         "__Secure-1PSID": "dwj5EheYAc7k5Iczm377qGm5DpLptdP7guY17AFHYHXS2Fzg4pYipp1xnl0pmny0awIisA.",
         "__Secure-1PSIDTS": "sidts-CjEBPVxjSvyMEBHgenQb9R1DGNxo9TVI0hbltBuOuWKKkqeEp4QXlat3SyH065HcbGKYEAA",
-        "__Secure-1PSIDCC": "ABTWhQGj_PZm57ZyUcr0nWHTA44qKfRg1BFPFirUkWcCS0D-3utU5L1pZpYtQVRrbj9DKvrb53c"
+        "__Secure-1PSIDCC": "ABTWhQGKZa9JhsJxFkVm17fLzFNU1-bHZu45IrxaJCSrHQDO0v7DPgq8C7XoXDNGBKqyaUPYoQg"
     }
 
     bard = BardCookies(cookie_dict=cookie_dict)

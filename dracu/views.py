@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 import bard_api
+from dracu.inference_image import predict_image
 
 news_dict = {0: {"title": "La Marato 2023",
                  "link": "https://www.ccma.cat/tv3/marato/",
@@ -95,12 +96,9 @@ class CameraApiView(APIView):
         photo = request.data.get('photo')
 
         if photo:
-            # Send photo to model
+            predict_image(photo)
 
-            # get model punctuation
-            punctuation = 0
-
-            return Response({'photo': photo, 'punctuation': punctuation}, status=201)
+            return Response({'photo': photo}, status=201)
         else:
             return Response({'error': "Photo not provided"}, status=400)
 

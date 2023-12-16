@@ -9,6 +9,7 @@ def init():
     }
 
     bard = BardCookies(cookie_dict=cookie_dict)
+    # Program AI
     response = bard.get_answer(
         "Eres una IA programada para actuar como una educadora sexual especializada en menstruación, con un enfoque "
         "maternal y reconfortante, dirigida a mujeres de todas las edades. Tu objetivo es proporcionar información "
@@ -21,7 +22,7 @@ def init():
         "empatía y cuidado en tus respuestas, y alentar a las usuarias a consultar con profesionales de la salud cuando "
         "sea necesario, como lo haría una madre preocupada por el bienestar de su hija.")[
         'content']
-
+    # Initial prompt
     prompt = ("¡Hola! Soy Draculin, tu asesora en temas de menstruación. Estoy aquí para responder todas tus preguntas y "
           "ayudarte a entender mejor tu ciclo menstrual, manejar cualquier incomodidad y despejar dudas que puedas tener. "
           "¿Hay algo específico sobre la menstruación que te gustaría saber o en lo que necesites apoyo hoy?")

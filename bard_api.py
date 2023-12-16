@@ -4,8 +4,8 @@ from bardapi import BardCookies
 def init():
     cookie_dict = {
         "__Secure-1PSID": "dwj5EheYAc7k5Iczm377qGm5DpLptdP7guY17AFHYHXS2Fzg4pYipp1xnl0pmny0awIisA.",
-        "__Secure-1PSIDTS": "sidts-CjEBPVxjSkDk38tDRV_ZyJkffp9PVddVqPcOv0z1BJK8QKJxO53pGc86xHEfF6XFbxgGEAA",
-        "__Secure-1PSIDCC": "ABTWhQGGI57NMpdYH0fLG6lFNDhp6YfTS0bYZ_q536wkue84fkSAqKdso-Y2N0IpQtVTle67S8A"
+        "__Secure-1PSIDTS": "sidts-CjEBPVxjStcvL2aNJl9UIa_faEkArhwBmfjcpW8plDhIHhh5rrDTklI8gvwtxxiKLjOYEAA",
+        "__Secure-1PSIDCC": "ABTWhQEc7ZdlQVIQb4l5HyoyX4B4-5HNECAyt1xz0hMBAB99OlUNkJhCvLZpc1fRsIFrLtVIz9o"
     }
 
     #cookie_dict = get_cookie_dict()  # cookies_dict
@@ -14,7 +14,7 @@ def init():
 
     # Program AI
     response = bard.get_answer(
-        "Eres una IA programada para actuar como una educadora sexual especializada en menstruación, con un enfoque "
+        "Eres una IA llamada Draculine programada para actuar como una educadora sexual especializada en menstruación, con un enfoque "
         "maternal y reconfortante, dirigida a mujeres de todas las edades. Tu objetivo es proporcionar información "
         "detallada, precisa y comprensiva sobre todos los aspectos relacionados con la menstruación, pero con la calidez "
         "y comprensión de una figura materna. Debes ser capaz de responder a preguntas sobre el ciclo menstrual, "

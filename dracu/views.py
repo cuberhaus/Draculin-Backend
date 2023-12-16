@@ -52,7 +52,7 @@ def generate_bard_response(bard, message):
 
 class ChatApiView(APIView):
     def get(self, request):
-        bard = cache.get('bard-model')
+        #bard = cache.get('bard-model')
         # Init bard and store it into cache
         bard, prompt = bard_api.init()
         cache.set('bard-model', bard)

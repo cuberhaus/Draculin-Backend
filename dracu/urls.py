@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import NewsApiView, QuizApiView, HealthCheckApiView, ChatApiView, CameraApiView
+from .views import NewsApiView, QuizApiView, HealthCheckApiView, ChatApiView, CameraApiView, StatsApiView
 
 urlpatterns = [
     path('healthcheck/', HealthCheckApiView.as_view(), name='healthcheck'),

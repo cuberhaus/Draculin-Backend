@@ -110,19 +110,20 @@ class CameraApiView(APIView):
             if serializer.is_valid():
                 image_bytes = serializer.validated_data['image']
 
-                # Procesamiento de la imagen
+                # Postprocess of the image
                 image_bytes = image_bytes.read()
                 image = Image.open(io.BytesIO(image_bytes))
                 image_rgb = image.convert('RGB')
 
+                # Get path of image processed and the ratio of blood
                 image_path, ratio = get_blood_ratio(image_rgb)
 
-                Image.open(image_path).convert('RGB').show()
-                print(image_path)
-                print(ratio)
+                #print(image_path)
+                #print(ratio)
 
 
-                return Response({'message': 'Image received'}, status=status.HTTP_200_OK)
+
+                return Response({'image': 'Image received', 'ratio': ratio}, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

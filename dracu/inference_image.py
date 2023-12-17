@@ -41,13 +41,18 @@ def predict_image(image: Image):
     project = rf.workspace().project("femenine-hygiene")
     model = project.version(2).model
     solution = model.predict(IMAGE_NAME)
-    solution.save('prediction.jpg')
+    prediction = solution.json()
 
-    prediction = get_max(solution.json())
+    if prediction['predictions']:
+        solution.save('prediction.jpg')
 
-    get_mask(image, prediction)
+        prediction = get_max(solution.json())
 
-    return blood_ratio(image)
+        get_mask(image, prediction)
+
+        return blood_ratio(image)
+    else:
+        return "Compresa no detectada"
 
 
 def blood_ratio(image: Image):

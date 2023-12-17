@@ -95,11 +95,15 @@ class ChatApiView(APIView):
 
 def base64_to_image(base64_string):
     # Decode the base64 string to bytes
+    print(type(base64_string))
     image_bytes = base64.b64decode(base64_string)
+    print(type(image_bytes))
 
     # Create a BytesIO object and load the image
     image_buffer = io.BytesIO(image_bytes)
+    print(type(image_buffer))
     image = Image.open(image_buffer)
+    print(type(image))
 
     return image
 

@@ -93,38 +93,33 @@ class ChatApiView(APIView):
             return Response({'error': "Message not provided"}, status=400)
 
 
+def base64_to_image(base64_string):
+    # Decode the base64 string to bytes
+    image_bytes = base64.b64decode(base64_string)
+
+    # Create a BytesIO object and load the image
+    image_buffer = io.BytesIO(image_bytes)
+    image = Image.open(image_buffer)
+
+    return image
+
+
 class CameraApiView(APIView):
 
     def get(self, request):
         return Response({'message': "Camera"}, status=status.HTTP_200_OK)
 
-from django.shortcuts import render
-from django import forms
+    def post(self, request):
+        image_base64 = request.data.get('image')
 
-class ImageUploadForm(forms.Form):
-    image = forms.ImageField()
+        image = base64_to_image(image_base64)
+        image_rgb = image.convert('RGB')
 
-    def post(request):
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Process the image file
-            image_file = form.cleaned_data['image']
+        # Get path of image processed and the ratio of blood
+        image_path, ratio = get_blood_ratio(image_rgb)
 
-            # Save the image file to a location or process it directly
-            # For example, you can save it to a folder
-            with open(image_file.name, 'wb') as destination:
-                for chunk in image_file.chunks():
-                    destination.write(chunk)
+        return Response({'image': 'Image received', 'ratio': ratio}, status=status.HTTP_200_OK)
 
-            image = Image.open(image_file.name)
-            image_rgb = image.convert('RGB')
-
-            # Get path of image processed and the ratio of blood
-            image_path, ratio = get_blood_ratio(image_rgb)
-
-            return Response({'image': 'Image received', 'ratio': ratio}, status=status.HTTP_200_OK)
-        else:
-            form = ImageUploadForm()
 
 class MessagesApiView(APIView):
 

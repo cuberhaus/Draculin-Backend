@@ -107,9 +107,9 @@ class CameraApiView(APIView):
         if serializer.is_valid():
             image = serializer.validated_data['image']
 
-            predict_image(image)
+            #predict_image(image)
 
-            return Response({'image': 'Imagen received again'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Imagen received again ' + type(image)}, status=status.HTTP_200_OK)
         else:
             # Devuelve una respuesta de error si la validación falla
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

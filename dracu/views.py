@@ -27,6 +27,7 @@ news_dict = {0: {"title": "La Marato 2023",
                  "link": "https://elpais.com/mamas-papas/expertos/2023-08-28/como-ayudar-a-tu-hija-a-superar-el-miedo-al-uso-del-tampon-y-la-copa-menstrual.html",
                  "img": "https://imagenes.elpais.com/resizer/uuGrWL3N7hGNPSKoNGjn49DHY5Q=/1200x0/filters:focal(2340x1430:2350x1440)/cloudfront-eu-central-1.images.arcpublishing.com/prisa/FG7RYWHKMBFGDOU2E4SX5CWAME.jpg"}}
 
+
 class HealthCheckApiView(APIView):
     def get(self, request):
         # try
@@ -97,32 +98,33 @@ class CameraApiView(APIView):
     def get(self, request):
         return Response({'message': "Camera"}, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        try:
-            serializer = ImageSerializer(data=request.data)
-            if serializer.is_valid():
-                image_bytes = serializer.validated_data['image']
+from django.shortcuts import render
+from django import forms
 
-                # Postprocess of the image
-                image_bytes = image_bytes.read()
-                image = Image.open(io.BytesIO(image_bytes))
-                image_rgb = image.convert('RGB')
+class ImageUploadForm(forms.Form):
+    image = forms.ImageField()
 
-                # Get path of image processed and the ratio of blood
-                image_path, ratio = get_blood_ratio(image_rgb)
+    def post(request):
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Process the image file
+            image_file = form.cleaned_data['image']
 
-                #print(image_path)
-                #print(ratio)
+            # Save the image file to a location or process it directly
+            # For example, you can save it to a folder
+            with open(image_file.name, 'wb') as destination:
+                for chunk in image_file.chunks():
+                    destination.write(chunk)
 
+            image = Image.open(image_file.name)
+            image_rgb = image.convert('RGB')
 
+            # Get path of image processed and the ratio of blood
+            image_path, ratio = get_blood_ratio(image_rgb)
 
-                return Response({'image': 'Image received', 'ratio': ratio}, status=status.HTTP_200_OK)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            print(f"Error en la vista: {e}")
-            return Response({'message': 'Server error!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            return Response({'image': 'Image received', 'ratio': ratio}, status=status.HTTP_200_OK)
+        else:
+            form = ImageUploadForm()
 
 class MessagesApiView(APIView):
 

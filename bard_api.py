@@ -4,10 +4,15 @@ from bardapi import BardCookies
 
 
 def init():
+    #cookie_dict = {
+    #    "__Secure-1PSID": os.environ.get("__Secure-1PSID"),
+    #    "__Secure-1PSIDTS": os.environ.get("__Secure-1PSIDTS"),
+    #    "__Secure-1PSIDCC": os.environ.get("__Secure-1PSIDCC")
+    #}
     cookie_dict = {
-        "__Secure-1PSID": os.environ.get("__Secure-1PSID"),
-        "__Secure-1PSIDTS": os.environ.get("__Secure-1PSIDTS"),
-        "__Secure-1PSIDCC": os.environ.get("__Secure-1PSIDCC")
+        "__Secure-1PSID": "dwj5EheYAc7k5Iczm377qGm5DpLptdP7guY17AFHYHXS2Fzg4pYipp1xnl0pmny0awIisA.",
+        "__Secure-1PSIDTS": "sidts-CjEBPVxjSs9pg1mC_356tJS2BZWIYvnUFOTxehzE4KoIFv3pnRlAeSa8ZwdxvivFY4y2EAA",
+        "__Secure-1PSIDCC": "ABTWhQGwCosg1lCYxjbu7q9WgDRkJ4duZuJ_T2NQLcELdFSKwFVi7CAYJuxlx3c5vy2uAj0e9Vo"
     }
 
     bard = BardCookies(cookie_dict=cookie_dict)

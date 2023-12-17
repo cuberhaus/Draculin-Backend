@@ -25,14 +25,7 @@ news_dict = {0: {"title": "La Marato 2023",
                  "img": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ1ARS6bM_n8mOlH2UjPFqSaNIxyqLSEnueI2B3-otT3VU_TRR7"},
              2: {"title": "Como ayudar a tu hija a superar el miedo al uso del tampon y la copa menstrual",
                  "link": "https://elpais.com/mamas-papas/expertos/2023-08-28/como-ayudar-a-tu-hija-a-superar-el-miedo-al-uso-del-tampon-y-la-copa-menstrual.html",
-                 "img": "https://imagenes.elpais.com/resizer/uuGrWL3N7hGNPSKoNGjn49DHY5Q=/1200x0/filters:focal(2340x1430:2350x1440)/cloudfront-eu-central-1.images.arcpublishing.com/prisa/FG7RYWHKMBFGDOU2E4SX5CWAME.jpg"},
-             3: {"title": "Las mujeres ya pueden solicitar la baja por menstruación dolorosa: claves y requisitos",
-                 "link": "https://www.publico.es/mujer/mujeres-ya-solicitar-baja-menstruacion-dolorosa-claves-y-requisitos.html#analytics-tag:listado",
-                 "image": "https://www.publico.es/files/article_main/uploads/2023/04/05/642d444bab1d8.jpeg"},
-             4: {"title": "La Generalitat de Catalunya ofrecerá productos menstruales gratuitos a casi dos millones de mujeres",
-                 "link": "https://www.publico.es/mujer/generalitat-catalunya-ofrecera-productos-menstruales-gratuitos-millones-mujeres.html#analytics-tag:listado",
-                 "image": "https://www.publico.es/files/article_main/uploads/2023/03/07/64077f727d6af.jpeg"}}
-
+                 "img": "https://imagenes.elpais.com/resizer/uuGrWL3N7hGNPSKoNGjn49DHY5Q=/1200x0/filters:focal(2340x1430:2350x1440)/cloudfront-eu-central-1.images.arcpublishing.com/prisa/FG7RYWHKMBFGDOU2E4SX5CWAME.jpg"}}
 
 class HealthCheckApiView(APIView):
     def get(self, request):

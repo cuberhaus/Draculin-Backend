@@ -1,3 +1,5 @@
+import base64
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -11,6 +13,8 @@ import io
 
 import bard_api
 from PIL import Image
+
+from dracu.inference_image import get_blood_ratio
 from dracu.serializers import ImageSerializer
 
 news_dict = {0: {"title": "La Marato 2023",
@@ -105,8 +109,18 @@ class CameraApiView(APIView):
             serializer = ImageSerializer(data=request.data)
             if serializer.is_valid():
                 image_bytes = serializer.validated_data['image']
+
                 # Procesamiento de la imagen
-                #image = Image.open(io.BytesIO(image_bytes))
+                image_bytes = image_bytes.read()
+                image = Image.open(io.BytesIO(image_bytes))
+                image_rgb = image.convert('RGB')
+
+                image_path, ratio = get_blood_ratio(image_rgb)
+
+                Image.open(image_path).convert('RGB').show()
+                print(image_path)
+                print(ratio)
+
 
                 return Response({'message': 'Image received'}, status=status.HTTP_200_OK)
             else:

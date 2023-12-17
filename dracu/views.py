@@ -7,8 +7,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+import io
+
 import bard_api
-from dracu.inference_image import predict_image
+from PIL import Image
 from dracu.serializers import ImageSerializer
 
 news_dict = {0: {"title": "La Marato 2023",
@@ -25,10 +27,7 @@ news_dict = {0: {"title": "La Marato 2023",
                  "image": "https://www.publico.es/files/article_main/uploads/2023/04/05/642d444bab1d8.jpeg"},
              4: {"title": "La Generalitat de Catalunya ofrecerá productos menstruales gratuitos a casi dos millones de mujeres",
                  "link": "https://www.publico.es/mujer/generalitat-catalunya-ofrecera-productos-menstruales-gratuitos-millones-mujeres.html#analytics-tag:listado",
-                 "image": "https://www.publico.es/files/article_main/uploads/2023/03/07/64077f727d6af.jpeg"},
-             5: {"title": "La ciencia se olvida de la menstruación, algo que ocurre 'solo' al 26% de la población",
-                 "link": "https://www.eldiario.es/sociedad/ciencia-olvida-menstruacion-ocurre-26-poblacion_1_10492002.html",
-                 "image": "https://static.eldiario.es/clip/49c8d2c8-8f4e-4afb-a5d0-d8fa29139d90_16-9-discover-aspect-ratio_default_0.webp"}}
+                 "image": "https://www.publico.es/files/article_main/uploads/2023/03/07/64077f727d6af.jpeg"}}
 
 
 class HealthCheckApiView(APIView):
@@ -105,11 +104,13 @@ class CameraApiView(APIView):
         serializer = ImageSerializer(data=request.data)
 
         if serializer.is_valid():
-            image = serializer.validated_data['image']
+            image_bytes = serializer.validated_data['image']
+
+            image = Image.open(io.BytesIO(image_bytes))
 
             #predict_image(image)
 
-            return Response({'message': 'Imagen received again ' + type(image)}, status=status.HTTP_200_OK)
+            return Response({'message': 'Imagen received again'}, status=status.HTTP_200_OK)
         else:
             # Devuelve una respuesta de error si la validación falla
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

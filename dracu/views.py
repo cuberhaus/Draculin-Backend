@@ -108,7 +108,7 @@ class CameraApiView(APIView):
                 # Procesamiento de la imagen
                 #image = Image.open(io.BytesIO(image_bytes))
 
-                return Response({'message': 'Imagen recibida'}, status=status.HTTP_200_OK)
+                return Response({'message': 'Image received'}, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

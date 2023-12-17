@@ -9,6 +9,7 @@ from rest_framework import status
 
 import bard_api
 from dracu.inference_image import predict_image
+from dracu.serializers import ImageSerializer
 
 news_dict = {0: {"title": "La Marato 2023",
                  "link": "https://www.ccma.cat/tv3/marato/",
@@ -92,15 +93,17 @@ class CameraApiView(APIView):
         return Response({'message': "Camera"}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        photo = request.data.get('photo')
+        serializer = ImageSerializer(data=request.data)
 
-        if photo:
-            #predict_image(photo)
+        if serializer.is_valid():
+            image = serializer.validated_data['image']
 
-            #return Response({'photo': 'prediction.jpg'}, status=201)
-            return Response({'message': 'okey'}, status=201)
+            #predict_image(image)
+
+            return Response({'message': 'Imagen received'}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': "Photo not provided"}, status=400)
+            # Devuelve una respuesta de error si la validación falla
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MessagesApiView(APIView):

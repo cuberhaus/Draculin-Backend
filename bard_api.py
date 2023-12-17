@@ -6,8 +6,8 @@ from bardapi import BardCookies
 def init():
     cookie_dict = {
         "__Secure-1PSID": "g.a000eQj5EkatbWxXRwAascNLAuPZOtQB0cnCBhNlMMBzBqL30Zu0YuLkwl5ajiwMJMuXCv6b5wACgYKARsSAQASFQHGX2MiiK5BPewet4iRR0RAb-jU_RoVAUF8yKoF9-tZzTdhyBgmBn7YUxLD0076",
-        "__Secure-1PSIDTS": "sidts-CjEBPVxjSi7iZp3Dc_ezo3kG31pmHR4G7XVOpubMceWO8oYRdVFs6uJc8Az46RSVM4aNEAA",
-        "__Secure-1PSIDCC": "ABTWhQGmxdCLj3S-FNRV15UlW3uYJ_fEULkthFIPaYZsLiUfdAtTAd_HUsfVwaZeqSc0q6COUME"
+        "__Secure-1PSIDTS": "sidts-CjEBPVxjShodDarUEsHVucUVaktJzvWXqbM8uqMzZV4LTO1EXRv-LYUXbWzaqhKgveAXEAA",
+        "__Secure-1PSIDCC": "ABTWhQHTvIvl5_y_Jd1HAS6SBT1k6fpEOabRxNYkyiDkPb68j3k5uitcoKy2YGvOH-RpJDaYgcs"
     }
 
     bard = BardCookies(cookie_dict=cookie_dict)

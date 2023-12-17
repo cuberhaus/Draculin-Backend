@@ -101,19 +101,19 @@ class CameraApiView(APIView):
         return Response({'message': "Camera"}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = ImageSerializer(data=request.data)
+        try:
+            serializer = ImageSerializer(data=request.data)
+            if serializer.is_valid():
+                image_bytes = serializer.validated_data['image']
+                # Procesamiento de la imagen
+                #image = Image.open(io.BytesIO(image_bytes))
 
-        if serializer.is_valid():
-            image_bytes = serializer.validated_data['image']
-
-            image = Image.open(io.BytesIO(image_bytes))
-
-            #predict_image(image)
-
-            return Response({'message': 'Imagen received again'}, status=status.HTTP_200_OK)
-        else:
-            # Devuelve una respuesta de error si la validación falla
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message': 'Imagen recibida'}, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(f"Error en la vista: {e}")
+            return Response({'message': 'Server error!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class MessagesApiView(APIView):

@@ -114,9 +114,13 @@ class CameraApiView(APIView):
         return Response({'message': "Camera"}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        image_base64 = request.data.get('image')
+        #image_base64 = request.data.get('image')
+        image_file = request.data['image']
+        with open('updated.jpeg', 'wb') as destination:
+            for chunk in image_file.chunks():
+                destination.write(chunk)
 
-        image = base64_to_image(image_base64)
+        image = Image.open(image_file)
         image_rgb = image.convert('RGB')
 
         # Get path of image processed and the ratio of blood

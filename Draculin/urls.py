@@ -15,9 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from dracu.views import serve_static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('dracu.urls'))
+    path('api/', include('dracu.urls')),
+    re_path(r'^media/(?P<path>.+)$', serve_static),
 ]

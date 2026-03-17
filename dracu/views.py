@@ -1,14 +1,29 @@
 import base64
 import io
+import mimetypes
+from pathlib import Path
 
 from django.shortcuts import render
 from django.core.cache import cache
+from django.http import FileResponse, Http404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from PIL import Image
+
+STATIC_DIR = Path(__file__).resolve().parent.parent / 'static'
+
+
+def serve_static(request, path):
+    file_path = STATIC_DIR / path
+    if not file_path.is_file() or not file_path.resolve().is_relative_to(STATIC_DIR):
+        raise Http404
+    content_type, _ = mimetypes.guess_type(str(file_path))
+    response = FileResponse(open(file_path, 'rb'), content_type=content_type)
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 try:
     import bard_api
@@ -29,13 +44,13 @@ except ImportError:
 
 news_dict = {0: {"title": "La Marato 2023",
                  "link": "https://www.ccma.cat/tv3/marato/",
-                 "img": "https://pessebre.org/wp-content/uploads/2022/12/logo-lamarato_normal.jpg"},
+                 "img": "/media/news/marato.jpg"},
              1: {"title": "Las farmacias catalanas distribuiran productos menstruales gratuitos a partir de 2024",
                  "link": "https://elpais.com/espana/catalunya/2023-09-21/las-farmacias-catalanas-distribuiran-productos-menstruales-gratuitos-a-partir-de-2024.html",
-                 "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Smiley.svg/200px-Smiley.svg.png"},
+                 "img": "/media/news/farmacia.png"},
              2: {"title": "Como ayudar a tu hija a superar el miedo al uso del tampon y la copa menstrual",
                  "link": "https://elpais.com/mamas-papas/expertos/2023-08-28/como-ayudar-a-tu-hija-a-superar-el-miedo-al-uso-del-tampon-y-la-copa-menstrual.html",
-                 "img": "https://imagenes.elpais.com/resizer/v2/FG7RYWHKMBFGDOU2E4SX5CWAME.jpg?auth=0114e8d48c8f0366a1b941827113ece4312cc0d203e12344e672a8c2aaa41c7a&width=1200"}}
+                 "img": "/media/news/copa_menstrual.jpg"}}
 
 
 class HealthCheckApiView(APIView):
@@ -53,7 +68,11 @@ class StatsApiView(APIView):
 
 class NewsApiView(APIView):
     def get(self, request):
-        return Response({'news': news_dict}, status=status.HTTP_200_OK)
+        base = request.build_absolute_uri('/').rstrip('/')
+        resolved = {}
+        for k, v in news_dict.items():
+            resolved[k] = {**v, 'img': base + v['img']}
+        return Response({'news': resolved}, status=status.HTTP_200_OK)
 
 
 class QuizApiView(APIView):

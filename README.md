@@ -1,3 +1,24 @@
+# Draculin Backend
+
+Django REST API for the Draculin health app. Provides endpoints for news, chatbot, quiz, camera/vision analysis, and stats.
+
+## Run locally
+
+**Prerequisites:** Docker
+
+```bash
+docker compose up -d
+```
+
+- **Backend API:** http://localhost:8889
+- **Flutter web frontend:** http://localhost:8890
+
+To stop: `docker compose down`.
+
+The chatbot and vision features need API keys (Google Bard, Roboflow) — they run in mock mode without them. News, quiz, calendar, and stats work fully.
+
+---
+
 ## Inspiración
 La inspiración para Draculin surgió de la necesidad de abordar dos aspectos cruciales en la salud menstrual: la falta de acceso a información confiable y la dificultad en el seguimiento del bienestar menstrual. Queríamos crear una herramienta que no solo educara y apoyara a las mujeres en temas de salud sexual y menstrual, sino que también proporcionara una forma innovadora y no invasiva de monitorear su salud menstrual.
 

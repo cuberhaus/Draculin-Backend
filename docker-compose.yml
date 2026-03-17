@@ -1,0 +1,16 @@
+services:
+  backend:
+    build: .
+    ports:
+      - "8889:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=Draculin.settings
+
+  frontend:
+    build:
+      context: ../Draculin-Front
+      network: host
+    ports:
+      - "8890:80"
+    depends_on:
+      - backend

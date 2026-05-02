@@ -13,36 +13,6 @@ from rest_framework import status
 
 from PIL import Image
 
-# ── Sentry helpers (no-op when SDK or canonical helper isn't available) ─
-try:
-    from Draculin._sentry_obs import (  # type: ignore[import-not-found]
-        breadcrumb as _crumb,
-        span as _span,
-        tag as _tag,
-    )
-except ImportError:
-    from contextlib import contextmanager
-
-    def _tag(*_a, **_kw):
-        return None
-
-    def _crumb(*_a, **_kw):
-        return None
-
-    @contextmanager
-    def _span(*_a, **_kw):
-        yield None
-
-
-def _image_size_bucket(size_bytes: int) -> str:
-    """Three-bucket image-size label so Sentry tag cardinality stays bounded."""
-    kb = size_bytes // 1024
-    if kb < 100:
-        return "small"
-    if kb < 1024:
-        return "medium"
-    return "large"
-
 STATIC_DIR = Path(__file__).resolve().parent.parent / 'static'
 
 
@@ -127,8 +97,6 @@ def generate_bard_response(bard, message):
 
 class ChatApiView(APIView):
     def get(self, request):
-        _tag("has_bard", HAS_BARD)
-        _crumb("chat", "session init", has_bard=HAS_BARD)
         if HAS_BARD:
             bard, prompt = bard_api.init()
             cache.set('bard-model', bard)
@@ -140,24 +108,15 @@ class ChatApiView(APIView):
         return Response({'messages_dict': messages_dict, 'message': prompt}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        _tag("has_bard", HAS_BARD)
         bard = cache.get('bard-model')
         messages_dict = cache.get('messages-dict') or {0: MOCK_PROMPT}
         message = request.data.get('message')
-
-        _crumb(
-            "chat", "user message received",
-            has_bard=HAS_BARD,
-            length=len(message) if message else 0,
-            history_size=len(messages_dict),
-        )
 
         messages_dict[len(messages_dict)] = message
         cache.set('messages-dict', messages_dict)
 
         if message:
-            with _span("bard.call", description="bard ask", has_bard=HAS_BARD):
-                bard, response_message = generate_bard_response(bard, message)
+            bard, response_message = generate_bard_response(bard, message)
             if bard:
                 cache.set('bard-model', bard)
             messages_dict[len(messages_dict)] = response_message
@@ -189,31 +148,16 @@ class CameraApiView(APIView):
 
     def post(self, request):
         if not HAS_VISION:
-            _crumb("camera", "image received (mock vision)", has_vision=False)
             return Response({'image': 'Image received', 'ratio': '[Mock mode] Vision model not available'}, status=status.HTTP_200_OK)
 
         image_file = request.data['image']
-        size_bytes = getattr(image_file, "size", 0) or 0
-        bucket = _image_size_bucket(size_bytes)
-        _tag("image_size_kb", bucket)
-        _crumb(
-            "camera", "image received",
-            size_bytes=size_bytes,
-            size_bucket=bucket,
-        )
         with open('updated.jpeg', 'wb') as destination:
             for chunk in image_file.chunks():
                 destination.write(chunk)
 
         image = Image.open(image_file)
         image_rgb = image.convert('RGB')
-        with _span(
-            "vision.blood_ratio",
-            description="get_blood_ratio",
-            size_bytes=size_bytes,
-            size_bucket=bucket,
-        ):
-            image_path, ratio = get_blood_ratio(image_rgb)
+        image_path, ratio = get_blood_ratio(image_rgb)
         return Response({'image': 'Image received', 'ratio': ratio}, status=status.HTTP_200_OK)
 
 

@@ -10,32 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-# ── Phase 14 (Option A) — Sentry SDK + JSON-line stdout (no-op if missing) ─
-try:
-    from ._sentry_obs import init_observability  # type: ignore[import-not-found]
-
-    init_observability(service="draculin")
-except ImportError:
-    pass
-
-# Explicitly assert DjangoIntegration registration so the ORM query spans,
-# request transactions, and middleware spans are visible in Sentry. The
-# `sentry-sdk[django]` extra usually auto-enables this, but recording our
-# preferred options in code (transaction_style="url", middleware_spans=True)
-# means future contributors can grep for it instead of guessing defaults.
-# Idempotent — `setdefault` is a no-op when auto-enable already registered.
-try:
-    import sentry_sdk  # type: ignore[import-not-found]
-    from sentry_sdk.integrations.django import DjangoIntegration  # type: ignore[import-not-found]
-
-    _client = sentry_sdk.get_client()
-    if _client is not None and getattr(_client, "integrations", None) is not None:
-        _client.integrations.setdefault(
-            "django",
-            DjangoIntegration(transaction_style="url", middleware_spans=True),
-        )
-except (ImportError, AttributeError):
-    pass
+# Sentry intentionally absent on this branch — see
+# `obs-experiment-embrace`. Mobile RUM (Embrace SDK in the Flutter
+# client) is the only telemetry source; the Django backend is opaque
+# to the observability stack by design. See
+# `observability/README.md` for the rationale.
 
 from pathlib import Path
 
@@ -72,11 +51,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    # Read X-Session-Id from incoming requests and stamp it on every Sentry
-    # event for cross-service correlation. Stays a no-op if `_sentry_obs`
-    # or `sentry_sdk` is absent (the helper degrades to a function that
-    # just returns get_response untouched).
-    'Draculin._sentry_obs.django_session_id_middleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

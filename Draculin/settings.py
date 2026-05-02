@@ -10,6 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+# ── Phase 14 (Option A) — Sentry SDK + JSON-line stdout (no-op if missing) ─
+try:
+    from ._sentry_obs import init_observability  # type: ignore[import-not-found]
+
+    init_observability(service="draculin")
+except ImportError:
+    pass
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

@@ -72,6 +72,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    # Read X-Session-Id from incoming requests and stamp it on every Sentry
+    # event for cross-service correlation. Stays a no-op if `_sentry_obs`
+    # or `sentry_sdk` is absent (the helper degrades to a function that
+    # just returns get_response untouched).
+    'Draculin._sentry_obs.django_session_id_middleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

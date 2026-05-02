@@ -18,6 +18,25 @@ try:
 except ImportError:
     pass
 
+# Explicitly assert DjangoIntegration registration so the ORM query spans,
+# request transactions, and middleware spans are visible in Sentry. The
+# `sentry-sdk[django]` extra usually auto-enables this, but recording our
+# preferred options in code (transaction_style="url", middleware_spans=True)
+# means future contributors can grep for it instead of guessing defaults.
+# Idempotent — `setdefault` is a no-op when auto-enable already registered.
+try:
+    import sentry_sdk  # type: ignore[import-not-found]
+    from sentry_sdk.integrations.django import DjangoIntegration  # type: ignore[import-not-found]
+
+    _client = sentry_sdk.get_client()
+    if _client is not None and getattr(_client, "integrations", None) is not None:
+        _client.integrations.setdefault(
+            "django",
+            DjangoIntegration(transaction_style="url", middleware_spans=True),
+        )
+except (ImportError, AttributeError):
+    pass
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

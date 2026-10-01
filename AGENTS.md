@@ -21,7 +21,6 @@ Local (no Docker): `pip install -r requirements.txt && python manage.py migrate 
 
 ## Pitfalls
 
-- Hackathon code, treat as frozen — avoid refactors.
 - Fork of `BITS2023/Draculin-Backend`; upstream is archived.
 - `requirements.txt` is UTF-16 encoded; Docker uses `requirements-docker.txt` instead.
 - Audit for hardcoded API keys (Bard, Roboflow) before any public push and rotate if found.
